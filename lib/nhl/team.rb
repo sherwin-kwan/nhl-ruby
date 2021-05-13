@@ -36,6 +36,13 @@ module NHL
         new(t) if t
       end
 
+      def find_short_name(query)
+        response = Faraday.get(URL)
+        data = JSON.parse(response.body)
+        t = data[KEY].find_by{|t| t['team_name'] == query}
+        new(t) if t
+      end
+
       # Returns a list of all NHL teams.
       def all
         response = Faraday.get(URL)
