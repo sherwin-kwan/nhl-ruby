@@ -39,7 +39,7 @@ module NHL
       def find_short_name(query)
         response = Faraday.get(URL)
         data = JSON.parse(response.body)
-        t = data[KEY].find_by{|t| t['team_name'] == query}
+        t = data[KEY].find{|t| t["teamName"] == query}
         new(t) if t
       end
 
