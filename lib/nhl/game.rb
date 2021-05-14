@@ -40,6 +40,13 @@ module NHL
         games
       end
 
+      # Retrieves all games between two given teams (provided as an array of two Team objects or two Team IDs) in the playoffs of the named year.
+      def playoff_series(year, teams_array)
+        teams = teams_array[0].class == Integer ? teams_array.sort : teams_array.map(&:id).sort
+        self.in_time_period("#{year.to_s}-04-01", "#{year.to_s}-09-30").filter{|g| g.game_type == "P"}.filter{|g| [g.home_team.id, g.away_team.id].sort == teams}
+      end
+
+
       # Retrieves all games from yesterday.
       def yesterday
         games_on_date((Time.now - (3600 * 24)).strftime("%Y-%m-%d"))

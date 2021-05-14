@@ -36,10 +36,11 @@ module NHL
         new(t) if t
       end
 
+      # something like "Leafs" will match "Toronto Maple Leafs"
       def find_short_name(query)
         response = Faraday.get(URL)
         data = JSON.parse(response.body)
-        t = data[KEY].find{|t| t["teamName"] == query}
+        t = data[KEY].find{|t| t["name"].include?(query)}
         new(t) if t
       end
 
