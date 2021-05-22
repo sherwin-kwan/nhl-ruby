@@ -43,7 +43,16 @@ module NHL
       # Retrieves all games between two given teams (provided as an array of two Team objects or two Team IDs) in the playoffs of the named year.
       def playoff_series(year, teams_array)
         teams = teams_array[0].class == Integer ? teams_array.sort : teams_array.map(&:id).sort
-        self.in_time_period("#{year.to_s}-04-01", "#{year.to_s}-09-30").filter{|g| g.game_type == "P"}.filter{|g| [g.home_team.id, g.away_team.id].sort == teams}
+        response = Faraday.get("#{URL}?startDate=#{year.to_s}-04-01&endDate=#{year.to_s}-09-30&teamId=#{teams[0]}&gameType=P")
+        data = JSON.parse(response.body)
+        dates = data['dates']
+        games = []
+        dates.each do |date|
+          date['games'].each do |g|
+            games << new(g)
+          end
+        end
+        games.filter{|g| [g.home_team.id, g.away_team.id].sort == teams}
       end
 
 
