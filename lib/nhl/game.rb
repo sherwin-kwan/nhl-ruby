@@ -41,7 +41,7 @@ module NHL
       end
 
       def playoff_schedule(year, team)
-        team = team.respond_to?(to_i) ? team.to_i : team.id
+        team = team.respond_to?(:to_i) ? team.to_i : team.id
         response = Faraday.get("#{URL}?startDate=#{year.to_s}-04-01&endDate=#{year.to_s}-09-30&teamId=#{teams[0]}&gameType=P")
         data = JSON.parse(response.body)
         dates = data['dates']
