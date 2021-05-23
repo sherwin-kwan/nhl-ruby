@@ -128,6 +128,10 @@ module NHL
     def date
       Date.parse(@game_date)
     end
+
+    def time
+      DateTime.parse(@game_date)
+    end
     alias game_date date
   end
 end
